@@ -6,7 +6,7 @@
 //var MainAddress="http://192.168.1.16:8080/";
 
 //本地测试
-var MainAddress="http://localhost:8082/";
+var MainAddress="http://localhost:8080/";
 
 
 //阿里云服务器
