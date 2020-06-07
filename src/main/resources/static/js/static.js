@@ -6,7 +6,7 @@
 //var MainAddress="http://192.168.1.16:8080/";
 
 //本地测试
-var MainAddress="http://localhost:8080/";
+var MainAddress="http://localhost:8082/";
 
 
 //阿里云服务器
@@ -119,38 +119,5 @@ function toPage(obj,type)//封装分页方法
 
 
 
-var determine=0;
 
-$("#gequmv").click(function(){
-	 if(determine==0)
-	 {
-	 //加载分页
-	 	var paging="<div class=\"col-md-2\" align=\"center\">分页</div><div class=\"col-md-8\" align=\"center\"><ul class=\"pagination\"><li><a href=\"#\" id=\"home\">首页</a></li><li><a href=\"#\" id=\"previous\">上一页</a></li><li><a href=\"#\" id=\"next\">下一页</a></li><li><a href=\"#\" id=\"last\">尾页</a></li></ul></div><div class=\"col-md-2\" align=\"center\">分页</div>";
-		 $("#div_page").append(paging);
-		 determine=1;
-	 }
-	  	 toPage(0,"歌曲mv");
-		 $("#ul1 li").css({float:"left",margin:"30px 30px 30px 30px"});
-		 $(".li1").css({width:"220px",height:"250px"});
-
-	});
-	
-$("#gaoxiaoshipin").click(function(){
-	 if(determine==0)
-	 {
-		//加载分页
-	 	//alert(determine);
-	 	var paging="<div class=\"col-md-2\" align=\"center\">分页</div><div class=\"col-md-8\" align=\"center\"><ul class=\"pagination\"><li><a href=\"#\" id=\"home\">首页</a></li><li><a href=\"#\" id=\"previous\">上一页</a></li><li><a href=\"#\" id=\"next\">下一页</a></li><li><a href=\"#\" id=\"last\">尾页</a></li></ul></div><div class=\"col-md-2\" align=\"center\">分页</div>";
-		 $("#div_page").append(paging);
-		 determine=1;
-	 }
-    toPage(0,"搞笑视频");
-	 $("#ul1 li").css({float:"left",margin:"30px 30px 30px 30px"});
-	 $(".li1").css({width:"220px",height:"250px"});
-
-	 
-	 /*要添加标题模板的话，直接以上面的2个标题为例，复制粘贴之后，设置jquery获取标签即可*/
-	 //<img src="/static/image/top1.gif" class="topimg">
-	 //图片标号:112234
-});
 
