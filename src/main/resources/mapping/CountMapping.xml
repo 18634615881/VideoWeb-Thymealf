@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.CountMapper">
+ 
+    <resultMap id="ResultMap" type="com.example.demo.entity.Access_statistics">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="nowdate" jdbcType="VARCHAR" property="nowdate" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+    </resultMap>
+ 
+     <select id="piechart" resultType="com.example.demo.entity.Access_statistics">
+        select count(*) value,type name from access_statistics group by type
+    </select>
+
+ 	<select id="histogramQuery" resultType="com.example.demo.entity.Access_statistics">
+        select count(*) value,nowdate name from access_statistics group by nowdate
+    </select>
+ 
+  	<select id="clickArea" resultType="com.example.demo.entity.Access_statistics_contrary">
+        select city name,count(*) value from access_statistics group by city
+    </select>
+ 
+</mapper>

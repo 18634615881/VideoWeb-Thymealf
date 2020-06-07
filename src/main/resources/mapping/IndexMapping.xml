@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.IndexMapper">
+ 
+    <resultMap id="ResultMap" type="com.example.demo.entity.Image">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="p_id" jdbcType="VARCHAR" property="p_id" />
+        <result column="location" jdbcType="VARCHAR" property="location" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    	<result column="videolocation" jdbcType="VARCHAR" property="videolocation" />
+    </resultMap>
+ 
+    <select id="loadimage" resultType="com.example.demo.entity.Image">
+        select * from image limit 10
+    </select>
+ 
+     <select id="toPage" resultType="com.example.demo.entity.Image">
+        select * from image
+        <if test='type!=""'>
+     	where type=#{type} 
+     	</if>
+        order by clicks desc limit #{page.start},#{page.count} 
+    </select>
+ 
+ 	<select id="count" resultType="java.lang.Integer">
+        select count(*) from image
+        <if test='type!=""'>
+     	where type=#{type} 
+     	</if>
+    </select>
+    
+    
+    
+ 
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.FileMapper">
+ 
+    <resultMap id="ResultMap" type="com.example.demo.entity.Image">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="p_id" jdbcType="VARCHAR" property="p_id" />
+        <result column="location" jdbcType="VARCHAR" property="location" />
+    <result column="clicks" jdbcType="INTEGER" property="clicks" />
+    </resultMap>
+ 
+    <insert id="storage" parameterType='Map'>
+        insert into image (location,videolocation,title,type) values(#{attachmentThumbnail},#{attachmentUrl},#{title},#{type})
+    </insert>
+ 
+   <delete id="delete" parameterType='java.lang.Integer'>
+        delete from image where id=#{id}
+    </delete>
+ 
+     <insert id="selfIncrement" parameterType='java.lang.Integer'>
+        update image set clicks=#{clicks} where id =#{id}
+    </insert>
+ 
+      <insert id="typeAccessStatistics" parameterType='java.lang.String'>
+        insert into access_statistics (nowdate,type,city) values(#{nowDate},#{type},#{city})
+    </insert>
+ 
+</mapper>

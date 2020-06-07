@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>访问量统计</title>
+<script type="text/javascript" src="/js/static.js"></script>
+<script type="text/javascript" src="/js/echarts.js"></script>
+<script type="text/javascript" src="/js/china.js"></script>
+<style>
+/*生产环境下为0px,测试环境下设置为1*/
+div{border:1px solid red;}
+#row_top1,#row_top2,#row_top3{text-align:center;}
+</style>
+</head>
+<body>
+<div class="container-fluid">
+	
+	<!--顶部导航栏 -->
+		<div class="row" id="row_top1">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a1">视频上传</a></div>
+			<div class="col-md-4"></div>
+		</div>
+		
+		<div class="row" id="row_top2">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a2">视频删除</a></div>
+			<div class="col-md-4"></div>
+		</div>
+		
+		<div class="row" id="row_top3">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a3">数量统计</a></div>
+			<div class="col-md-4"></div>
+		</div>
+	
+	
+	<!--饼图-->
+		<div class="row">
+			<div class=" col-lg-4"></div>
+			<div class="col-md-4 col-lg-4" id="piechart"  style="height:300px;"></div>
+			<div class="col-md-4 col-lg-4"></div>
+		</div>
+		<!--柱状图-->
+			<div class="row">
+			<div class=" col-lg-4"></div>
+			<div class="col-md-4 col-lg-4" id="histogramQuery"  style="height:300px;"></div>
+			<div class="col-md-4 col-lg-4"></div>
+		</div>
+
+		<!--访问地域图-->
+			<div class="row">
+			<div class=" col-lg-4"></div>
+			<div class="col-md-4 col-lg-4" id="clickArea"  style="height:500px;"></div>
+			<div class="col-md-4 col-lg-4"></div>
+		</div>
+		
+</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function(){
+	clickAreaQuery();
+	histogramQuery();
+	piechart();
+	function piechart(){
+    var url1 = MainAddress+"count/piechart";
+    /*饼图数据查询*/
+     $.ajax({
+        type: "POST",
+        dataType: "text",
+        url: url1,
+        async: false,
+        success: function (result) {
+        	//console.log(result)
+        	//console.log("JSON化之后");
+        	var data = JSON.parse(result);
+        	
+        	var myChart = echarts.init(document.getElementById('piechart'));
+        	var option1 = {
+        		    tooltip: {
+        		        trigger: 'item',
+        		        formatter: '{a} <br/>{b}: {c} ({d}%)'
+        		    },
+        		    legend: {
+        		        orient: 'vertical',
+        		        left: 10,
+        		        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
+        		    },
+        		    series: [
+        		        {
+        		            name: '访问来源',
+        		            type: 'pie',
+        		            radius: ['50%', '70%'],
+        		            avoidLabelOverlap: false,
+        		            label: {
+        		                normal: {
+        		                    show: false,
+        		                    position: 'center'
+        		                },
+        		                emphasis: {
+        		                    show: true,
+        		                    textStyle: {
+        		                        fontSize: '30',
+        		                        fontWeight: 'bold'
+        		                    }
+        		                }
+        		            },
+        		            labelLine: {
+        		                normal: {
+        		                    show: false
+        		                }
+        		            },
+        		            data: [
+        		                {value: 335, name: '直接访问'},
+        		                {value: 310, name: '邮件营销'},
+        		                {value: 234, name: '联盟广告'},
+        		                {value: 135, name: '视频广告'},
+        		                {value: 1548, name: '搜索引擎'}
+        		            ]
+        		        }
+        		    ]
+        		};
+
+        	//console.log(data)
+        	//console.log(option.series[0].data);
+        	//console.log(option.series[0].data[0]);
+        	option1.series[0].data=data;
+        	myChart.setOption(option1);
+        },
+        error:function (result) {
+            alert('首页跳转失败！');
+        }
+    });
+    
+	}
+    
+     /*柱状图数据查询*/ 
+     function histogramQuery(){
+     var url2 = MainAddress+"count/histogramQuery";
+      $.ajax({
+         type: "POST",
+         dataType: "text",
+         url: url2,
+         async: false,
+         success: function (result) {	
+        	
+        	 var data = JSON.parse(result);
+        	 //console.log(data);
+        	 var key=new Array();//横坐标表示时间(键)
+        	 var value=new Array();//纵坐标表示访问量(值)
+        	
+        	 for(var p in data){//遍历json数组时，这么写p为索引，0,1
+        		 value[p]=data[p].value;  //装纵坐标(访问量)的数组
+        		 key[p]=data[p].name;	  //装横坐标(日期)的数组
+        		}
+        	 //console.log(key);
+        	 //console.log(value);
+        	 
+        	 var myChart = echarts.init(document.getElementById('histogramQuery'));
+        	 var option2 = {
+        			    color: ['#3398DB'],
+        			    tooltip: {
+        			        trigger: 'axis',
+        			        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+        			            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        			        }
+        			    },
+        			    grid: {
+        			        left: '3%',
+        			        right: '4%',
+        			        bottom: '3%',
+        			        containLabel: true
+        			    },
+        			    xAxis: [
+        			        {
+        			            type: 'category',
+        			            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        			            axisTick: {
+        			                alignWithLabel: true
+        			            }
+        			        }
+        			    ],
+        			    yAxis: [
+        			        {
+        			            type: 'value'
+        			        }
+        			    ],
+        			    series: [
+        			        {
+        			            name: '日访问量',
+        			            type: 'bar',
+        			            barWidth: '60%',
+        			            data: [10, 52, 200, 334, 390, 330, 220]
+        			        }
+        			    ]
+        			};
+         
+         
+        	option2.xAxis[0].data=key;
+        	option2.series[0].data=value;
+        	//console.log(option2.series[0].data);
+        	myChart.setOption(option2);
+         
+         
+         },
+         error:function (result) {
+             alert('首页跳转失败！');
+         }
+     });
+      
+     }
+     /*点击量分布图数据查询*/ 
+      function clickAreaQuery(){
+   
+          var url3 = MainAddress+"count/clickArea";
+          //var myChart = echarts.init(document.getElementById('clickArea'));
+          
+           $.ajax({
+              type: "POST",
+              dataType: "text",
+              url: url3,
+              async: false,
+              success: function (result) {	
+            	  console.log("未变换位置之前"+result);
+            	  var dataList = JSON.parse(result);
+            	  
+            	 /* 
+            	  
+            	  for(var i in dataList){
+            	      var num;
+            	      num=dataList[i].name;
+            	      dataList[i].name=dataList[i].value;
+            	      dataList[i].value=num;
+            	  }
+            	  console.log("转换之后*************");
+               	  for(var i in dataList){
+               		console.log("转换之后"+dataList[i].name);
+               		console.log("转换之后"+dataList[i].value);
+            	  }
+               	 console.log("完全转换位置之后"+dataList);
+            	  */
+            	  
+            	  /*var dataList=[
+                      {name:"南海诸岛",value:0},
+                      {name: '北京', value: randomValue()},
+                      {name: '天津', value: randomValue()},
+                      {name: '上海', value: randomValue()},
+                      {name: '重庆', value: randomValue()},
+                      {name: '河北', value: randomValue()},
+                      {name: '河南', value: randomValue()},
+                      {name: '云南', value: randomValue()},
+                      {name: '辽宁', value: randomValue()},
+                      {name: '黑龙江', value: randomValue()},
+                      {name: '湖南', value: randomValue()},
+                      {name: '安徽', value: randomValue()},
+                      {name: '山东', value: randomValue()},
+                      {name: '新疆', value: randomValue()},
+                      {name: '江苏', value: randomValue()},
+                      {name: '浙江', value: randomValue()},
+                      {name: '江西', value: randomValue()},
+                      {name: '湖北', value: randomValue()},
+                      {name: '广西', value: randomValue()},
+                      {name: '甘肃', value: randomValue()},
+                      {name: '山西', value: randomValue()},
+                      {name: '内蒙古', value: randomValue()},
+                      {name: '陕西', value: randomValue()},
+                      {name: '吉林', value: randomValue()},
+                      {name: '福建', value: randomValue()},
+                      {name: '贵州', value: randomValue()},
+                      {name: '广东', value: randomValue()},
+                      {name: '青海', value: randomValue()},
+                      {name: '西藏', value: randomValue()},
+                      {name: '四川', value: randomValue()},
+                      {name: '宁夏', value: randomValue()},
+                      {name: '海南', value: randomValue()},
+                      {name: '台湾', value: randomValue()},
+                      {name: '香港', value: randomValue()},
+                      {name: '澳门', value: randomValue()}
+                  ];*/
+                  var myChart = echarts.init(document.getElementById('clickArea'));
+                  function randomValue() {
+                      return Math.round(Math.random()*1000);
+                  }
+                  option = {
+                      tooltip: {
+                              formatter:function(params,ticket, callback){
+                                  return params.seriesName+'<br />'+params.name+'：'+params.value
+                              }//数据格式化
+                          },
+                      visualMap: {
+                          min: 0,
+                          max: 1500,
+                          left: 'left',
+                          top: 'bottom',
+                          text: ['高','低'],//取值范围的文字
+                          inRange: {
+                              color: ['#e0ffff', '#006edd']//取值范围的颜色
+                          },
+                          show:true//图注
+                      },
+                      geo: {
+                          map: 'china',
+                          roam: false,//不开启缩放和平移
+                          zoom:1.23,//视角缩放比例
+                          label: {
+                              normal: {
+                                  show: true,
+                                  fontSize:'10',
+                                  color: 'rgba(0,0,0,0.7)'
+                              }
+                          },
+                          itemStyle: {
+                              normal:{
+                                  borderColor: 'rgba(0, 0, 0, 0.2)'
+                              },
+                              emphasis:{
+                                  areaColor: '#F3B329',//鼠标选择区域颜色
+                                  shadowOffsetX: 0,
+                                  shadowOffsetY: 0,
+                                  shadowBlur: 20,
+                                  borderWidth: 0,
+                                  shadowColor: 'rgba(0, 0, 0, 0.5)'
+                              }
+                          }
+                      },
+                      series : [
+                          {
+                              name: '信息量',
+                              type: 'map',
+                              geoIndex: 0,
+                              data:dataList
+                          }
+                      ]
+                  };
+                  
+                  myChart.setOption(option);
+                  myChart.on('click', function (params) {
+                      //alert(params.name);
+                  });
+            	  
+              },
+              error:function (result) {
+                  alert('首页跳转失败！');
+              }
+          });
+    	  
+    	}//函数结束处
+      
+});
+
+$('#a1').attr('href',MainAddress+"user/toVideoUpload");
+$('#a2').attr('href',MainAddress+"user/toDelete");
+$('#a3').attr('href',MainAddress+"count/toCount");
+</script>
+
+
+</html>

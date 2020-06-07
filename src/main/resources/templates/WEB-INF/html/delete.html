@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>视频内容删除</title>
+	<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script type="text/javascript" src="/js/static.js"></script>
+	<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script type="text/javascript">
+	$(document).ready(function()
+		{
+		//alert("首页加载成功！");
+			toPage(0,"");
+		})
+	</script>
+<style>
+/*
+生产环境下为0px,测试环境下设置为1
+*/
+div{border:0px solid red;}
+#div3{border:1px solid black;}
+#row_top1,#row_top2,#row_top3{text-align:center;}
+
+.ul1 li{float:left;margin:30px 30px 30px 30px;list-style:none;}
+.li1{width:220px;height:250px;}
+
+#div3{text-align:center;padding:0px;}
+*{margin:0; padding:0;}
+</style>
+</head>
+<body>
+<div class="container-fluid" id="div1">
+
+		<!--顶部导航栏 -->
+		<div class="row" id="row_top1">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a1">视频上传</a></div>
+			<div class="col-md-4"></div>
+		</div>
+		
+		<div class="row" id="row_top2">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a2">视频删除</a></div>
+			<div class="col-md-4"></div>
+		</div>
+		
+		<div class="row" id="row_top3">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a3">数量统计</a></div>
+			<div class="col-md-4"></div>
+		</div>
+
+
+
+		<!--列表显示功能 -->
+		<div class="row" id="div2">
+		<div class="col-md-2">&nbsp;</div>
+		<div class="col-md-8" id="div3">
+		<ul class="ul1" id="ul1">
+		</ul>
+		</div>
+		
+		<div class="col-md-2">&nbsp;</div>
+		</div>
+		
+		
+		<!--分页功能 -->
+		<div class="row" id="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		
+		<div class="col-md-8" align="center">
+		<ul class="pagination">
+			<li><a href="#" id="home">首页</a></li>
+			<li><a href="#" id="previous">上一页</a></li>
+			<li><a href="#" id="next">下一页</a></li>
+			<li><a href="#" id="last">尾页</a></li>
+			
+	
+</ul>
+
+
+		
+		</div>
+		
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+
+
+</div>
+</body>
+<script>
+
+
+function toPage(obj,type)//封装分页方法
+{
+	var url = MainAddress+"index/toPage";
+	var start=0;
+	$.ajax({
+        type: "GET",
+        dataType: "text",
+        url: url,
+        data: {start:obj,type:type},
+        async: false,
+        success: function (result) {
+        	
+			var map = JSON.parse(result);
+			var page=map.page;
+			var obj=map.result;	
+			var title=map.title;
+			console.log(map);
+        	var element='';
+        	
+			 var current=page.start;//起始索引
+			 var PageCount=page.totalPage;//总页数
+			 var hasPreviouse=page.hasPreviouse;//是否有上一页
+			 var hasNext=page.hasNext;//是否有下一页
+			 var count=page.count;//每页显示数量
+			 var last=page.last;//尾页跳转索引
+        	
+			 /*获取当前访问时间，精确到年月日*/
+	        	var date = new Date();
+	        	var year = date.getFullYear();
+	        	var month = date.getMonth() + 1;
+	        	var day = date.getDate();
+	        	if (month < 10) {
+	        	    month = "0" + month;
+	        	}
+	        	if (day < 10) {
+	        	    day = "0" + day;
+	        	}
+	        	var nowDate = year + "-" + month + "-" + day;
+			 
+	        	var city=returnCitySN["cname"];//获取当前访问者所在城市
+        	
+        	//obj = JSON.parse(result);
+        	$("#ul1").children().remove();
+        	for(var i=0;i<obj.length;i++)
+				{
+				element+="<li><a target=\"_blank\" href=\""+MainAddress+"file/play?videoMessage="+obj[i].videolocation+"&clicks="+obj[i].clicks+"&id="+obj[i].id+"&nowDate="+nowDate+"&city="+city+"&type="+obj[i].type+"\"><image class=\"li1\" src=\""+obj[i].location+"\"><br>"+obj[i].title+"</a><a style=\"margin-left:30px;\" href=\""+MainAddress+"file/delete?id="+obj[i].id+"\">删除</a><span style=\"margin-left:30px;\">☆"+obj[i].clicks+"</span></li>";
+				
+				}
+			 //console.log(MainAddress);
+			 $("#ul1").append(element);
+			 
+			 
+			 //console.log(page);
+			 $("#home").off("click").on("click",(function(){
+			 	  toPage(0,type);
+			 	  //alert("首页跳转");	
+			 	}));
+
+			 //下一页跳转
+			 $("#next").off("click").on("click",(function(){
+			 	if(hasNext==true)
+			 	  {toPage(current+count,type);
+			 	  	
+			 	  }
+			 		//alert("下一页跳转");	
+			 }));
+
+			 //上一页跳转
+			 $("#previous").off("click").on("click",(function(){
+			 	if(hasPreviouse==true)
+			 		{toPage(current-count,type);}
+			 	}));
+
+			 //尾页跳转
+			 $("#last").off("click").on("click",(function(){
+			 		toPage(last,type);
+			 	}));
+			 
+        },
+        error:function (result) {
+            alert('首页跳转失败！');
+        }
+    });
+	
+}
+
+$('#a1').attr('href',MainAddress+"user/toVideoUpload");
+$('#a2').attr('href',MainAddress+"user/toDelete");
+$('#a3').attr('href',MainAddress+"count/toCount");
+</script>
+</html>

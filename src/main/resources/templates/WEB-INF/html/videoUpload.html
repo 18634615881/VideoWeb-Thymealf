@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <script type="text/javascript" src="/js/static.js"></script>
+	<script type="text/javascript"></script>
+<title>文件上传</title>
+<style>
+/*
+生产环境下为0px,测试环境下设置为1
+*/
+div{border:1px solid red;}
+#row_top1,#row_top2,#row_top3{text-align:center;}
+</style>
+</head>
+<body>
+<div class="container-fluid">
+	
+		<!--顶部导航栏 -->
+		<div class="row" id="row_top1">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a1">视频上传</a></div>
+			<div class="col-md-4"></div>
+		</div>
+		
+		<div class="row" id="row_top2">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a2">视频删除</a></div>
+			<div class="col-md-4"></div>
+		</div>
+		
+		<div class="row" id="row_top3">
+			<div class="col-lg-4"></div>
+			<div class="col-md-4"><a id="a3">数量统计</a></div>
+			<div class="col-md-4"></div>
+		</div>
+	
+	
+		<div class="row" id="row2">
+		<div class="col-md-12" align="center">
+		<form method="post" enctype="multipart/form-data" id="form1">
+        <input type="file" name="file"/>
+        <br>
+                       标题
+        <input type="text" class="form-control" placeholder="标题" name="title">
+        <br>
+        <br>
+                      类型	
+        <input type="text" class="form-control" placeholder="类型" name="type">
+        <br>
+        <br>
+        <button type="submit" class="btn btn-info">上传</button>
+    	</form>
+		</div>
+		</div>
+		
+		</div>
+
+</body>
+<script>
+$("#form1").attr("action", MainAddress+"file/fileUpload");
+$('#a1').attr('href',MainAddress+"user/toVideoUpload");
+$('#a2').attr('href',MainAddress+"user/toDelete");
+$('#a3').attr('href',MainAddress+"count/toCount");
+</script>
+</html>

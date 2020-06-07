@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>视频播放</title>
+	<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+	<script type="text/javascript" src="/js/static.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+
+			var width=$("#div3").width();
+			var height=$("#div3").height();
+			//alert(width); //浏览器当前窗口可视区域高度
+			//alert(height); //浏览器当前窗口可视区域宽度
+			//$("#video1").width(width);
+			//$("#video1").height(height);
+			
+			//#("video1").width(800px);
+			//#("video1").height(500px);
+
+})
+</script>
+
+<style>
+div{border:1px solid red;}
+*{margin:0; padding:0;}
+#div3{text-align:center;padding:0px;}
+#ul1{list-style-type:none;}
+#div3{text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="container-fluid" id="div1">
+
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+		
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+		
+		
+		
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>
+		</div>
+
+		<div class="row">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">
+		<table class="table table-bordered">
+		<caption>视频类别</caption>
+
+		<tbody align="center">
+		<tr>
+			<td colspan="3"><a href="#" id="gequmv" >歌曲mv</a></td>
+			<td colspan="3"><a href="#" id="gaoxiaoshipin" >搞笑视频</a></td>
+		</tr>
+		</tbody>
+		</table>
+		</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+
+		<div class="row" id="div2">	
+		<div class=" col-md-2 col-xs-12">&nbsp;</div>
+		<div class="col-md-8" id="div3">
+		<ul class="ul1" id="ul1">
+		<li>
+		<video controls autoplay id="video1" width=100% height="625px">
+		  <source src="movie.ogg" type="video/ogg">
+		  <source th:src="${videoMessage}" type="video/mp4">
+		  <source src="movie.webm" type="video/webm">
+		  <object th:data="${videoMessage}" width="320" height="240">
+    	  <embed width="320" height="240" src="movie.swf">
+  		</object>
+		</video>
+		</li>
+		</ul>
+		</div>	
+		<div class=" col-md-2 col-xs-12">&nbsp;</div>
+		</div>
+		
+		<!--这个div内插入分页按钮 -->
+		<div class="row" id="div_page"></div>
+		
+		<!--底部界面 -->
+		<div class="row" id="row-bottom1">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+		
+		<div class="row" id="row-bottom2">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+		
+		<div class="row" id="row-bottom3">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+		
+		<div class="row" id="row-bottom4">
+		<div class="col-md-2" align="center">&nbsp;</div>
+		<div class="col-md-8" align="center">&nbsp;</div>
+		<div class="col-md-2" align="center">&nbsp;</div>		
+		</div>
+
+</div>
+<script type="text/javascript">
+var determine=0;//防止分页按钮被重复加载
+$("#gequmv").click(function(){
+	 if(determine==0)
+	 {
+	 //加载分页
+	 	var paging="<div class=\"row\" id=\"row\"><div class=\"col-md-2\" align=\"center\">分页</div><div class=\"col-md-8\" align=\"center\"><ul class=\"pagination\"><li><a href=\"#\" id=\"home\">首页</a></li><li><a href=\"#\" id=\"previous\">上一页</a></li><li><a href=\"#\" id=\"next\">下一页</a></li><li><a href=\"#\" id=\"last\">尾页</a></li></ul></div><div class=\"col-md-2\" align=\"center\">分页</div></div>";
+		 $("#div_page").append(paging);
+		 determine=1;
+	 }
+	  	 toPage(0,"歌曲mv");
+		 $("#ul1 li").css({float:"left",margin:"30px 30px 30px 30px"});
+		 $(".li1").css({width:"220px",height:"250px"});
+	});
+	
+$("#gaoxiaoshipin").click(function(){
+	 if(determine==0)
+	 {
+		//加载分页
+	 	//alert(determine);
+	 	var paging="<div class=\"row\" id=\"row\"><div class=\"col-md-2\" align=\"center\">分页</div><div class=\"col-md-8\" align=\"center\"><ul class=\"pagination\"><li><a href=\"#\" id=\"home\">首页</a></li><li><a href=\"#\" id=\"previous\">上一页</a></li><li><a href=\"#\" id=\"next\">下一页</a></li><li><a href=\"#\" id=\"last\">尾页</a></li></ul></div><div class=\"col-md-2\" align=\"center\">分页</div></div>";
+		 $("#div_page").append(paging);
+		 determine=1;
+	 }
+    toPage(0,"搞笑视频");
+	 $("#ul1 li").css({float:"left",margin:"30px 30px 30px 30px"});
+	 $(".li1").css({width:"220px",height:"250px"});
+
+	 /*要添加标题模板的话，直接以上面的2个标题为例，复制粘贴之后，设置jquery获取标签即可*/
+	 //<img src="/static/image/top1.gif" class="topimg">
+	 //图片标号:112234
+});
+</script>
+
+</body>
+</html>
